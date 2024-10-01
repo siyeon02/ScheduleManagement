@@ -10,5 +10,6 @@ public class UserResponseDto {
     public String name;
 
     public UserResponseDto(User user) {
+        this.name = user.getName();
     }
 }

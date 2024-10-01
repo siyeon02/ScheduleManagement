@@ -4,31 +4,35 @@ import com.sparta.schedulemanagement.entity.Schedule;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Getter
 @Setter
 public class ScheduleResponseDto {
     private Long id;
-    public String name;
+    public String username;
     public String title;
     public String content;
-    public LocalDateTime date;
-    public LocalDateTime updatedDate;
+    public LocalDate date;
+    public LocalDate updatedDate;
 
     public ScheduleResponseDto(Schedule schedule) {
-        this.id = getId();
-        this.title = getTitle();
-        this.content = getContent();
-        this.date = getDate();
-        this.updatedDate = getUpdatedDate();
+        this.id = schedule.getId();
+        this.title = schedule.getTitle();
+        this.username = schedule.getUsername();
+        this.content = schedule.getContent();
+        this.date = schedule.getDate();
+        this.updatedDate = schedule.getUpdatedDate();
     }
 
 
-    public ScheduleResponseDto(Long id, String title, String content) {
+    public ScheduleResponseDto(Long id, String username, String title, String content) {
         this.id = id;
+        this.username = username;
         this.title = title;
         this.content = content;
     }
+
+
 }
