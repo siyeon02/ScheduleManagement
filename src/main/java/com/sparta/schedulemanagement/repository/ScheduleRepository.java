@@ -1,8 +1,11 @@
 package com.sparta.schedulemanagement.repository;
 
+import com.sparta.schedulemanagement.Page;
 import com.sparta.schedulemanagement.dto.ScheduleRequestDto;
 import com.sparta.schedulemanagement.dto.ScheduleResponseDto;
 import com.sparta.schedulemanagement.entity.Schedule;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -10,7 +13,11 @@ import org.springframework.jdbc.support.KeyHolder;
 
 import java.sql.*;
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
+
+import static org.springframework.data.relational.core.sql.Functions.count;
+
 
 public class ScheduleRepository {
     private final JdbcTemplate jdbcTemplate;
@@ -18,6 +25,7 @@ public class ScheduleRepository {
     public ScheduleRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
+
 
     public Schedule save(Schedule schedule){
         KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -45,10 +53,13 @@ public class ScheduleRepository {
 
     }
 
-    public List<ScheduleResponseDto> findAll() {
-        String sql = "SELECT * FROM schedule";
+    public List<ScheduleResponseDto> findAll(int page, int size) {
 
-        return jdbcTemplate.query(sql, new RowMapper<ScheduleResponseDto>() {
+        int offset = page * size;
+
+        String sql = "SELECT * FROM schedule LIMIT ? OFFSET ?";
+
+        return jdbcTemplate.query(sql, new Object[]{size, offset}, new RowMapper<ScheduleResponseDto>() {
             @Override
             public ScheduleResponseDto mapRow(ResultSet rs, int rowNum) throws SQLException {
                 Long id = rs.getLong("id");
@@ -66,6 +77,23 @@ public class ScheduleRepository {
             }
         });
     }
+
+//    public Page<ScheduleResponseDto> findAll(Pageable pageable){
+//        int pageSize = pageable.getPageSize();
+//        int offset = pageable.getPageNumber()*pageSize;
+//
+//        String sql = "SELECT * FROM schedule LIMIT ? OFFSET ?";
+//        List<ScheduleResponseDto> schedules = Collections.singletonList(jdbcTemplate.queryForObject(sql, new Object[]{pageSize, offset}, (rs, rowNum) -> {
+//            Long id = rs.getLong("id");
+//            String username = rs.getString("username");
+//            String title = rs.getString("title");
+//            String content = rs.getString("content");
+//            LocalDate date = rs.getDate("date") != null ? rs.getDate("date").toLocalDate() : null;
+//            return new ScheduleResponseDto(id, username, title, content, date);
+//        }));
+//        long total = count();
+//        return (Page<ScheduleResponseDto>) new PageImpl<>(schedules, pageable, total);
+//    }
 
     public ScheduleResponseDto findByUser(Long id) {
         String sql = "SELECT * FROM schedule WHERE id = ?";

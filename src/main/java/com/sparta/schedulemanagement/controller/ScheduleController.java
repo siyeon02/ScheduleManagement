@@ -25,9 +25,11 @@ public class ScheduleController {
     }
 
     @GetMapping("/schedule")
-    public List<ScheduleResponseDto> getSchedule(){
+    public List<ScheduleResponseDto> getSchedule(@RequestParam(value = "page", defaultValue = "0") int page,
+                                                 @RequestParam(value = "size", defaultValue = "3") int size){
         ScheduleService scheduleService = new ScheduleService(jdbcTemplate);
-        return scheduleService.getSchedule();
+
+        return scheduleService.getSchedule(page, size);
 
     }
 

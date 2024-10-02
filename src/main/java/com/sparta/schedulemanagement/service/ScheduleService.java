@@ -4,6 +4,7 @@ import com.sparta.schedulemanagement.dto.ScheduleRequestDto;
 import com.sparta.schedulemanagement.dto.ScheduleResponseDto;
 import com.sparta.schedulemanagement.entity.Schedule;
 import com.sparta.schedulemanagement.repository.ScheduleRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.util.List;
@@ -28,10 +29,10 @@ public class ScheduleService {
 
     }
 
-    public List<ScheduleResponseDto> getSchedule() {
+    public List<ScheduleResponseDto> getSchedule(int page, int size) {
 
         ScheduleRepository scheduleRepository = new ScheduleRepository(jdbcTemplate);
-        return scheduleRepository.findAll();
+        return scheduleRepository.findAll(page, size);
 
     }
 
