@@ -1,11 +1,11 @@
 package com.sparta.schedulemanagement.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.sparta.schedulemanagement.entity.Schedule;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 @Getter
 @Setter
@@ -14,8 +14,10 @@ public class ScheduleResponseDto {
     public String username;
     public String title;
     public String content;
-    public LocalDate date;
-    public LocalDate updatedDate;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate date;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate updatedDate;
 
     public ScheduleResponseDto(Schedule schedule) {
         this.id = schedule.getId();
@@ -27,12 +29,15 @@ public class ScheduleResponseDto {
     }
 
 
-    public ScheduleResponseDto(Long id, String username, String title, String content) {
+    public ScheduleResponseDto(Long id, String username, String title, String content, LocalDate date) {
         this.id = id;
         this.username = username;
         this.title = title;
         this.content = content;
+        this.date = date;
+
     }
+
 
 
 }
