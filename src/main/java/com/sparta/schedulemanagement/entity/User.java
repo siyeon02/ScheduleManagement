@@ -4,13 +4,16 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
+
 @Getter
 @Setter
 @NoArgsConstructor
 public class User {
 
-    private String id;
-    public String name;
-    private String password;
+    public String username;
+    public String email;
+    private LocalDate date;
+    private LocalDate updatedDate;
 
 }
