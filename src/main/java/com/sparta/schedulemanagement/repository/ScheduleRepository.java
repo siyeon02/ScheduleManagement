@@ -63,7 +63,7 @@ public class ScheduleRepository {
                 // null 체크 후 LocalDate 변환
                 Date date = rs.getDate("date");
                 LocalDate localDate = (date != null) ? date.toLocalDate() : null;
-                Date updatedDate = rs.getDate("updatedDate");
+                Date updatedDate = rs.getDate("updated_date");
                 LocalDate localupdatedDate = (updatedDate != null) ? updatedDate.toLocalDate() : null;
 
                 return new ScheduleResponseDto(id, username, title, content, localDate, localupdatedDate);
@@ -86,7 +86,7 @@ public class ScheduleRepository {
                 String title = rs.getString("title");
                 String content = rs.getString("content");
                 LocalDate date = rs.getDate("date").toLocalDate();
-                Date updatedDate = rs.getDate("updatedDate");
+                Date updatedDate = rs.getDate("updated_date");
                 LocalDate localupdatedDate = (updatedDate != null) ? updatedDate.toLocalDate() : null;
                 return new ScheduleResponseDto(id, username, title, content, date, localupdatedDate);
 

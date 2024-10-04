@@ -11,8 +11,8 @@ public class ScheduleRequestDto {
     public String title;
     public String content;
     public String username;
-//    @JsonFormat(pattern = "yyyy-MM-dd")
-//    private LocalDate date;
-//    @JsonFormat(pattern = "yyyy-MM-dd")
-//    private LocalDate updatedDate;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate date;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate updatedDate;
 }
