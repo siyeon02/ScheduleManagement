@@ -3,9 +3,11 @@ package com.sparta.schedulemanagement.controller;
 import com.sparta.schedulemanagement.dto.ScheduleRequestDto;
 import com.sparta.schedulemanagement.dto.ScheduleResponseDto;
 import com.sparta.schedulemanagement.service.ScheduleService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -42,12 +44,14 @@ public class ScheduleController {
     }
 
     @PutMapping("/schedule/{id}")
-    public Long updateSchedule(@PathVariable Long id, @RequestBody ScheduleRequestDto requestDto){
+    public ResponseEntity<ScheduleResponseDto> updateSchedule(@PathVariable Long id, @RequestBody ScheduleRequestDto requestDto){
 
         ScheduleService scheduleService = new ScheduleService(jdbcTemplate);
         String password = requestDto.getPassword();
-        return scheduleService.updateSchedule(id, password, requestDto);
+        //LocalDate updatedDate = scheduleService.updateSchedule(id, password, requestDto);
 
+        ScheduleResponseDto updatedSchedule = scheduleService.updateSchedule(id, password, requestDto);
+        return ResponseEntity.ok(updatedSchedule);
 
     }
 

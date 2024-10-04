@@ -7,6 +7,7 @@ import com.sparta.schedulemanagement.repository.ScheduleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public class ScheduleService {
@@ -43,15 +44,17 @@ public class ScheduleService {
 
     }
 
-    public Long updateSchedule(Long id, String password, ScheduleRequestDto requestDto) {
+    public ScheduleResponseDto updateSchedule(Long id, String password, ScheduleRequestDto requestDto) {
 
         ScheduleRepository scheduleRepository = new ScheduleRepository(jdbcTemplate);
 
         Schedule schedule = scheduleRepository.findById(id);
         if(schedule!= null){
-            scheduleRepository.update(id, password, requestDto);
+            LocalDate updateDate = LocalDate.now();
+            scheduleRepository.update(id, password, requestDto, updateDate);
 
-            return id;
+            ScheduleResponseDto responseDto = new ScheduleResponseDto(id, requestDto.getUsername(), requestDto.getTitle(), requestDto.getContent(), requestDto.getDate(), updateDate);
+            return responseDto;
 
         }else{
             throw new IllegalArgumentException("선택한 스케쥴은 존재하지 않습니다.");

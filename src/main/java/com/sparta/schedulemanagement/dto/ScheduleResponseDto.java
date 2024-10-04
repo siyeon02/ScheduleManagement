@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -14,9 +15,9 @@ public class ScheduleResponseDto {
     public String username;
     public String title;
     public String content;
-    @JsonFormat(pattern = "yyyy-MM-dd")
+
     private LocalDate date;
-    @JsonFormat(pattern = "yyyy-MM-dd")
+
     private LocalDate updatedDate;
 
     public ScheduleResponseDto(Schedule schedule) {
@@ -29,14 +30,21 @@ public class ScheduleResponseDto {
     }
 
 
-    public ScheduleResponseDto(Long id, String username, String title, String content, LocalDate date) {
+    public ScheduleResponseDto(Long id, String username, String title, String content, LocalDate date, LocalDate updatedDate) {
         this.id = id;
         this.username = username;
         this.title = title;
         this.content = content;
         this.date = date;
+        this.updatedDate = updatedDate;
 
     }
+
+    public ScheduleResponseDto(Long id, LocalDate updatedDate) {
+        this.id = id;
+        this. updatedDate= updatedDate;
+    }
+
 
 
 

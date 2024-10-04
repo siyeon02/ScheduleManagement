@@ -1,11 +1,8 @@
 package com.sparta.schedulemanagement.repository;
 
-import com.sparta.schedulemanagement.Page;
 import com.sparta.schedulemanagement.dto.ScheduleRequestDto;
 import com.sparta.schedulemanagement.dto.ScheduleResponseDto;
 import com.sparta.schedulemanagement.entity.Schedule;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -13,10 +10,7 @@ import org.springframework.jdbc.support.KeyHolder;
 
 import java.sql.*;
 import java.time.LocalDate;
-import java.util.Collections;
 import java.util.List;
-
-import static org.springframework.data.relational.core.sql.Functions.count;
 
 
 public class ScheduleRepository {
@@ -69,8 +63,10 @@ public class ScheduleRepository {
                 // null 체크 후 LocalDate 변환
                 Date date = rs.getDate("date");
                 LocalDate localDate = (date != null) ? date.toLocalDate() : null;
+                Date updatedDate = rs.getDate("updatedDate");
+                LocalDate localupdatedDate = (updatedDate != null) ? updatedDate.toLocalDate() : null;
 
-                return new ScheduleResponseDto(id, username, title, content, localDate);
+                return new ScheduleResponseDto(id, username, title, content, localDate, localupdatedDate);
                 /*LocalDate date = rs.getDate("date").toLocalDate();
                 return new ScheduleResponseDto(id, username, title, content, date);*/
 
@@ -90,20 +86,23 @@ public class ScheduleRepository {
                 String title = rs.getString("title");
                 String content = rs.getString("content");
                 LocalDate date = rs.getDate("date").toLocalDate();
-                return new ScheduleResponseDto(id, username, title, content, date);
+                Date updatedDate = rs.getDate("updatedDate");
+                LocalDate localupdatedDate = (updatedDate != null) ? updatedDate.toLocalDate() : null;
+                return new ScheduleResponseDto(id, username, title, content, date, localupdatedDate);
 
             }
         });
 
     }
 
-    public void update(Long id, String password, ScheduleRequestDto requestDto) {
+    public LocalDate update(Long id, String password, ScheduleRequestDto requestDto, LocalDate updatedDate) {
         String passwordsql = "SELECT password FROM schedule WHERE id = ?";
         String dbpassword = jdbcTemplate.queryForObject(passwordsql, new Object[]{id}, String.class);
 
         if(dbpassword != null && dbpassword.equals(password)){
-            String sql = "UPDATE schedule SET username = ?, title = ? , content = ? WHERE id = ?";
-            jdbcTemplate.update(sql, requestDto.getUsername(), requestDto.getTitle(), requestDto.getContent(), id);
+            String sql = "UPDATE schedule SET username = ?, title = ? , content = ?, updated_date = ? WHERE id = ?";
+            jdbcTemplate.update(sql, requestDto.getUsername(), requestDto.getTitle(), requestDto.getContent(), updatedDate, id);
+            return updatedDate;
         }else{
             throw new IllegalArgumentException("Wrong password");
         }
