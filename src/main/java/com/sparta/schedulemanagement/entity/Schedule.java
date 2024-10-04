@@ -26,11 +26,9 @@ public class Schedule {
     public String content;
 
     @CreatedDate
-    @DateTimeFormat(pattern = "yyyy-MM-dd/HH:mm:ss")
     public LocalDate date;
 
     @LastModifiedDate
-    @DateTimeFormat(pattern = "yyyy-MM-dd/HH:mm:ss")
     public LocalDate updatedDate;
 
     public Schedule(ScheduleRequestDto requestDto) {
