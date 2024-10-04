@@ -43,13 +43,13 @@ public class ScheduleService {
 
     }
 
-    public Long updateSchedule(Long id, ScheduleRequestDto requestDto) {
+    public Long updateSchedule(Long id, String password, ScheduleRequestDto requestDto) {
 
         ScheduleRepository scheduleRepository = new ScheduleRepository(jdbcTemplate);
 
         Schedule schedule = scheduleRepository.findById(id);
         if(schedule!= null){
-            scheduleRepository.update(id, requestDto);
+            scheduleRepository.update(id, password, requestDto);
 
             return id;
 
@@ -59,13 +59,13 @@ public class ScheduleService {
 
     }
 
-    public Long deleteSchedule(Long id) {
+    public Long deleteSchedule(Long id, String password) {
 
         ScheduleRepository scheduleRepository = new ScheduleRepository(jdbcTemplate);
 
         Schedule schedule = scheduleRepository.findById(id);
         if(schedule != null){
-            scheduleRepository.delete(id);
+            scheduleRepository.delete(id, password);
 
             return id;
 

@@ -45,15 +45,18 @@ public class ScheduleController {
     public Long updateSchedule(@PathVariable Long id, @RequestBody ScheduleRequestDto requestDto){
 
         ScheduleService scheduleService = new ScheduleService(jdbcTemplate);
-        return scheduleService.updateSchedule(id, requestDto);
+        String password = requestDto.getPassword();
+        return scheduleService.updateSchedule(id, password, requestDto);
+
 
     }
 
     @DeleteMapping("/schedule/{id}")
-    public Long deleteSchedule(@PathVariable Long id){
+    public Long deleteSchedule(@PathVariable Long id, @RequestBody ScheduleRequestDto requestDto){
 
         ScheduleService scheduleService = new ScheduleService(jdbcTemplate);
-        return scheduleService.deleteSchedule(id);
+        String password = requestDto.getPassword();
+        return scheduleService.deleteSchedule(id, password);
 
     }
 

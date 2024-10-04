@@ -78,23 +78,6 @@ public class ScheduleRepository {
         });
     }
 
-//    public Page<ScheduleResponseDto> findAll(Pageable pageable){
-//        int pageSize = pageable.getPageSize();
-//        int offset = pageable.getPageNumber()*pageSize;
-//
-//        String sql = "SELECT * FROM schedule LIMIT ? OFFSET ?";
-//        List<ScheduleResponseDto> schedules = Collections.singletonList(jdbcTemplate.queryForObject(sql, new Object[]{pageSize, offset}, (rs, rowNum) -> {
-//            Long id = rs.getLong("id");
-//            String username = rs.getString("username");
-//            String title = rs.getString("title");
-//            String content = rs.getString("content");
-//            LocalDate date = rs.getDate("date") != null ? rs.getDate("date").toLocalDate() : null;
-//            return new ScheduleResponseDto(id, username, title, content, date);
-//        }));
-//        long total = count();
-//        return (Page<ScheduleResponseDto>) new PageImpl<>(schedules, pageable, total);
-//    }
-
     public ScheduleResponseDto findByUser(Long id) {
         String sql = "SELECT * FROM schedule WHERE id = ?";
 
@@ -114,14 +97,30 @@ public class ScheduleRepository {
 
     }
 
-    public void update(Long id, ScheduleRequestDto requestDto) {
-        String sql = "UPDATE schedule SET username = ?, title = ? , content = ? WHERE id = ?";
-        jdbcTemplate.update(sql, requestDto.getUsername(), requestDto.getTitle(), requestDto.getContent(), id);
+    public void update(Long id, String password, ScheduleRequestDto requestDto) {
+        String passwordsql = "SELECT password FROM schedule WHERE id = ?";
+        String dbpassword = jdbcTemplate.queryForObject(passwordsql, new Object[]{id}, String.class);
+
+        if(dbpassword != null && dbpassword.equals(password)){
+            String sql = "UPDATE schedule SET username = ?, title = ? , content = ? WHERE id = ?";
+            jdbcTemplate.update(sql, requestDto.getUsername(), requestDto.getTitle(), requestDto.getContent(), id);
+        }else{
+            throw new IllegalArgumentException("Wrong password");
+        }
+
     }
 
-    public void delete(Long id) {
-        String sql = "DELETE FROM schedule WHERE id = ?";
-        jdbcTemplate.update(sql,id);
+    public void delete(Long id, String password) {
+        String passwordsql = "SELECT password FROM schedule WHERE id = ?";
+        String dbpassword = jdbcTemplate.queryForObject(passwordsql, new Object[]{id}, String.class);
+
+        if(dbpassword != null && dbpassword.equals(password)){
+            String sql = "DELETE FROM schedule WHERE id = ?";
+            jdbcTemplate.update(sql,id);
+        }else{
+            throw new IllegalArgumentException("Wrong password");
+        }
+
     }
 
     public Schedule findById(Long id) {
